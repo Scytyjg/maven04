@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wl.maven04.dao.AuthMapper">
+    <resultMap id="AuthResultMap" type="auth">
+        <id column="dbid" property="dbid"/>
+        <collection property="children" ofType="auth" select="queryAuthByParentId" column="dbid" />
+    </resultMap>
+    <resultMap id="AuthResultMap1" type="roleAuth">
+        <id column="dbid" property="id"/>
+        <result column="authName" property="text"/>
+        <collection property="children" ofType="roleAuth" select="queryAuthByParentId1" column="dbid" />
+    </resultMap>
+    <select id="queryAuthByParentId" parameterType="int" resultMap="AuthResultMap">
+        select *
+        from auth
+        where parentId = #{parentId}
+    </select>
+    <select id="queryAuthByParentId1" parameterType="int" resultMap="AuthResultMap1">
+        select *
+        from auth
+        where parentId = #{parentId}
+        and valid = 1;
+    </select>
+    <update id="updateAuth" parameterType="auth" >
+        UPDATE `ccc`.`auth` t
+        SET authName = #{authName},
+            authCode = #{authCode},
+            authURL = #{authURL},
+            type = #{type},
+            orders = #{orders},
+            valid = #{valid}
+        WHERE dbid = #{dbid}
+    </update>
+    <update id="validAuthByDbid" parameterType="map" >
+        UPDATE `ccc`.`auth` t SET valid = #{valid} WHERE dbid = #{dbid}
+    </update>
+    <insert id="addAuth" parameterType="auth">
+        insert into auth (authName,authCode,authURL,type,parentId,orders,valid,layer)
+        values (${authName},${authCode},${authURL},${type},${parentId},${orders},${valid},${layer});
+    </insert>
+    <delete id="removeAuth" parameterType="int">
+      delete from auth where dbid = #{dbid}
+    </delete>
+
+
+</mapper>

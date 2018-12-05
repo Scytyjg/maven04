@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wl.maven04.dao.RolesMapper">
+
+
+    <select id="queryRoles" resultType="role" >
+        select *
+        from role
+    </select>
+    <select id="queryRolesByValid" resultType="role" >
+        select *
+        from role
+        where valid='1'
+    </select>
+
+    <select id="queryRoleAuth" resultType="int" parameterType="int">
+        SELECT auth.dbid
+        FROM role,auth,role_auth
+        WHERE
+            role_auth.authId = auth.dbid
+            AND role_auth.roleId = role.dbid
+            AND role.dbid = #{roleId}
+
+    </select>
+    <update id="updateRole" parameterType="role" >
+        UPDATE `ccc`.`role` t
+        SET roleName = #{roleName},
+            roleCode = #{roleCode},
+            valid = #{valid},
+            orders = #{orders}
+        WHERE dbid = #{dbid}
+    </update>
+    <delete id="deleteRoleAuth" parameterType="int">
+        delete from role_auth where dbid = #{dbid}
+    </delete>
+    <delete id="deleteRoleAuthByRoleId" parameterType="int">
+        delete from role_auth where roleId = #{roleId}
+    </delete>
+    <insert id="addRoleAuth" parameterType="list" >
+        insert into role_auth (`roleId`, `authId`)
+        values
+            <foreach collection="list" item="roleAuth" separator=",">
+                (#{roleAuth.roleId},#{roleAuth.id})
+            </foreach>
+    </insert>
+</mapper>
