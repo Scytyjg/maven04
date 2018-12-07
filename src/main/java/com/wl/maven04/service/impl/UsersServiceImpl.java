@@ -23,6 +23,12 @@ public class UsersServiceImpl implements UsersService {
         List<User> users = usersMapper.queryUsers();
         return users;
     }
+
+    public User queryUser(User user) {
+        User user1 = usersMapper.queryUser(user);
+        return user1;
+    }
+
     public List<RoleAuth> queryUserRole(Integer userId) {
         List<RoleAuth> roleAuths = usersMapper.queryUserRole(userId);
         return roleAuths;

@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface UsersMapper {
     List<User> queryUsers();
+    User queryUser(User user);
     Integer updateUser(User user);
     List<RoleAuth> queryUserRole(Integer userId);
     Integer deleteUserRole(Integer dbid);

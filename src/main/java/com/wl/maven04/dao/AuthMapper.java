@@ -13,4 +13,5 @@ public interface AuthMapper {
     Integer addAuth(Auth auth);
     Integer updateAuth(Auth auth);
     Integer removeAuth(Integer dbid);
+    List<Auth> getAuthJson(Integer userId);
 }

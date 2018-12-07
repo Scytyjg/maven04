@@ -5,12 +5,21 @@
 <mapper namespace="com.wl.maven04.dao.AuthMapper">
     <resultMap id="AuthResultMap" type="auth">
         <id column="dbid" property="dbid"/>
-        <collection property="children" ofType="auth" select="queryAuthByParentId" column="dbid" />
+        <id column="dbid" property="id"/>
+        <id column="authName" property="authName"/>
+        <id column="authName" property="text"/>
+        <collection property="children" ofType="auth" select="queryAuthByParentId" column="dbid"/>
     </resultMap>
     <resultMap id="AuthResultMap1" type="roleAuth">
         <id column="dbid" property="id"/>
         <result column="authName" property="text"/>
-        <collection property="children" ofType="roleAuth" select="queryAuthByParentId1" column="dbid" />
+        <collection property="children" ofType="roleAuth" select="queryAuthByParentId1" column="dbid"/>
+    </resultMap>
+    <resultMap id="AuthResultMap2" type="auth">
+        <id column="dbid" property="dbid"/>
+        <id column="dbid" property="id"/>
+        <id column="authName" property="authName"/>
+        <id column="authName" property="text"/>
     </resultMap>
     <select id="queryAuthByParentId" parameterType="int" resultMap="AuthResultMap">
         select *
@@ -21,27 +30,47 @@
         select *
         from auth
         where parentId = #{parentId}
-        and valid = 1;
+              and valid = 1;
     </select>
-    <update id="updateAuth" parameterType="auth" >
+    <select id="getAuthJson" parameterType="int" resultMap="AuthResultMap2">
+        select *
+        from auth
+        where
+         valid = 1
+        and layer > 0
+        and type = 1
+        and dbid in (
+            select authId
+            from role_auth
+            where roleId in (
+                select roleId
+                from user_role
+                where userId = 26
+            ));
+
+    </select>
+    <update id="updateAuth" parameterType="auth">
         UPDATE `ccc`.`auth` t
         SET authName = #{authName},
             authCode = #{authCode},
-            authURL = #{authURL},
-            type = #{type},
-            orders = #{orders},
-            valid = #{valid}
+            authURL  = #{authURL},
+            type     = #{type},
+            orders   = #{orders},
+            valid    = #{valid}
         WHERE dbid = #{dbid}
     </update>
-    <update id="validAuthByDbid" parameterType="map" >
-        UPDATE `ccc`.`auth` t SET valid = #{valid} WHERE dbid = #{dbid}
+    <update id="validAuthByDbid" parameterType="map">
+        UPDATE `ccc`.`auth` t
+        SET valid = #{valid}
+        WHERE dbid = #{dbid}
     </update>
     <insert id="addAuth" parameterType="auth">
-        insert into auth (authName,authCode,authURL,type,parentId,orders,valid,layer)
-        values (${authName},${authCode},${authURL},${type},${parentId},${orders},${valid},${layer});
+        insert into auth (authName, authCode, authURL, type, parentId, orders, valid, layer)
+        values (${authName}, ${authCode}, ${authURL}, ${type}, ${parentId}, ${orders}, ${valid}, ${layer});
     </insert>
     <delete id="removeAuth" parameterType="int">
-      delete from auth where dbid = #{dbid}
+        delete from auth
+        where dbid = #{dbid}
     </delete>
 
 

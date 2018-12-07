@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UsersService {
     List<User> queryUsers();
+    User  queryUser(User user);
     List<RoleAuth> queryUserRole(Integer userId);
     Integer updateUser(User user);
     Integer adUserRole(String arr,Integer userId);

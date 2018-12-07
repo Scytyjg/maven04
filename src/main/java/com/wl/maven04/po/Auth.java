@@ -4,7 +4,9 @@ import java.util.List;
 
 public class Auth {
     private Integer dbid;
+    private Integer id;
     private String authName;
+    private String text;
     private String authCode;
     private String authURL;
     private String type;
@@ -14,6 +16,22 @@ public class Auth {
     private Integer layer;
     private Integer tag;
     private List<Auth> children;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 
     public Integer getTag() {
         return tag;
@@ -107,7 +125,9 @@ public class Auth {
     public String toString() {
         return "Auth{" +
                 "dbid=" + dbid +
+                ", id=" + id +
                 ", authName='" + authName + '\'' +
+                ", text='" + text + '\'' +
                 ", authCode='" + authCode + '\'' +
                 ", authURL='" + authURL + '\'' +
                 ", type='" + type + '\'' +

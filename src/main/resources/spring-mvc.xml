@@ -18,4 +18,15 @@
     <mvc:default-servlet-handler/>
     <mvc:annotation-driven/>
     <mvc:view-controller view-name="hello" path="/hello"/>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/login"/>
+            <mvc:exclude-mapping path="/doLogin"/>
+            <mvc:exclude-mapping path="/static/**"/>
+            <mvc:exclude-mapping path="/json/**"/>
+            <mvc:exclude-mapping path="/getAuthJson/**"/>
+            <ref bean="loginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

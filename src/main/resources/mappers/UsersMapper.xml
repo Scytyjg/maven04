@@ -9,6 +9,12 @@
         select *
         from user
     </select>
+    <select id="queryUser" resultType="user" parameterType="user">
+        select *
+        from user
+        where userName = #{userName}
+        and password = #{passWord}
+    </select>
     <select id="queryUserRole" resultType="roleAuth" parameterType="int">
         select dbid ,roleId
         from user_role

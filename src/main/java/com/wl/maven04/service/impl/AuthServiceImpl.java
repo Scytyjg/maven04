@@ -8,6 +8,8 @@ import com.wl.maven04.po.RoleAuth;
 import com.wl.maven04.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +75,30 @@ public class AuthServiceImpl implements AuthService {
         }
         util(auth);
     }
+
+    @Override
+    public List<Auth> getAuthJson(Integer userId) {
+        List<Auth> authJson = authMapper.getAuthJson(userId);
+        System.out.println( JSON.toJSONString(authJson));
+        List<Auth> children = null;
+        Auth son = null;
+        Auth father = null;
+        for (int i = authJson.size()-1; i >= 0; i--) {
+            children =  new ArrayList<>();
+             father = authJson.get(i);
+            for (int j = 0; j <authJson.size() ; j++) {
+                 son = authJson.get(j);
+                if (son.getParentId().equals(father.getDbid())){
+                    authJson.remove(j);
+                    j--;
+                    children.add(son);
+                }
+            }
+            father.setChildren(children);
+        }
+        return authJson;
+    }
+
     private void util(Auth auth){
         Integer integer = authMapper.removeAuth(auth.getDbid());
         if (auth.getChildren()!=null){

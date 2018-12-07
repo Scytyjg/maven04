@@ -19,6 +19,7 @@ public interface AuthService {
 
     void removeAuth(Integer parentId, Integer dbid);
 
+    List<Auth> getAuthJson(Integer userId);
 
 
 }
